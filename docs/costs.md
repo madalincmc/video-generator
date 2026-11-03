@@ -49,7 +49,7 @@ Each row is one real run from a saved transcript, using Claude Opus 5.5 at Claud
 
 Uncached input was under 40 tokens per run, so it's left out.
 
-Four runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed. Soft orbs was a test of the tool, so its scene isn't in this repo.
+Four runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed. Soft orbs was a test of the tool, and its scene is in [`heroes/soft-orbs`](../heroes/soft-orbs/scene.js).
 
 **Why the totals look so high:** about 85 to 90% of each total is cache reads. Every model call re-reads the conversation so far, and cached context counts for far less than new work, so the token total overstates how much work a run really was.
 
