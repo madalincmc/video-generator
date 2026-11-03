@@ -109,11 +109,11 @@ Everything here was built and measured on a **basic Claude Code subscription**.
 | Activity | What it uses | Additional cost |
 |---|---|---|
 | **Generate an MP4 video** | Your Claude usage: about 1.4M to 1.6M tokens, 7 to 8 minutes | **$0** |
-| **Generate a live animation** | Your Claude usage: about 0.9M tokens, 3.5 minutes | **$0** |
+| **Generate a live animation** | Your Claude usage: about 0.4M to 0.9M tokens, 2 to 3.5 minutes | **$0** |
 | **Re-render or rebuild an existing scene** | Your machine only | **$0** |
 | **Visitors viewing a live animation** | Their GPU, and your site's hosting | **$0** for AI |
 
-One video used an estimated **10 to 13% of a session limit** and about 1% of the weekly limit, so roughly 7 to 10 similar videos fit in a session window. That's from a single measured run, so yours will vary.
+One video used an estimated **10 to 13% of a session limit** and about 1% of the weekly limit, so roughly 7 to 10 similar videos fit in a session window. A simple live animation used about 5% of a session limit. Those are single measured runs, so yours will vary.
 
 **[Full cost breakdown →](docs/costs.md)**
 

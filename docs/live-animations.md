@@ -100,7 +100,7 @@ mask-composite: intersect;
 
 ## Speed and cost
 
-The measured run took about 3.5 minutes. Generating draws on your Claude Code usage once, at no additional cost, and after that your site runs the file with **no AI involved at all**. See [What it costs](costs.md).
+The two measured runs took 2 to 3.5 minutes. Generating draws on your Claude Code usage once, at no additional cost, and after that your site runs the file with **no AI involved at all**. See [What it costs](costs.md).
 
 ## Limitations
 

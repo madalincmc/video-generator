@@ -21,16 +21,16 @@ This is the main strength of the architecture. Claude Code is the only AI involv
 
 ## How much of your usage it takes
 
-We ran `/usage` before and after generating the balloon video on the basic subscription:
+We ran `/usage` before and after two generations on the basic subscription:
 
-| Limit | Before | After | Change |
-|---|---|---|---|
-| Current session | 26% | 40% | +14 points |
-| Current week, all models | 4% | 5% | +1 point |
+| Run | Current session | Current week, all models |
+|---|---|---|
+| Hot air balloon video | 26% to 40% (+14 points) | 4% to 5% (+1 point) |
+| Soft orbs animation | 74% to 79% (+5 points) | 9% to 9% (no visible change) |
 
-- That window also included about 534K tokens from the Claude session running the test, so we estimate the video itself at **10 to 13%** of a session limit.
+- The balloon's window also included about 534K tokens from the Claude session running the test, so we estimate the video itself at **10 to 13%** of a session limit.
 - That suggests **roughly 7 to 10 similar videos** in one session window, if you use Claude for nothing else.
-- `/usage` shows whole percentages, so the weekly figure is rough. It's also a single run, so expect yours to vary by prompt and plan.
+- `/usage` shows whole percentages, so the weekly figure is rough. These are only two runs, so expect yours to vary by prompt and plan.
 
 To see your own numbers, run `/usage` in Claude Code before and after a generation.
 
@@ -45,12 +45,13 @@ Each row is one real run from a saved transcript, using Claude Opus 5.5 at Claud
 | Paper boat, 6s vertical | MP4 | 8.3 min | 17 | 50,953 | 102,713 | 1,411,036 | **1.56M** |
 | Hot air balloon, 8s 1080p | MP4 | 7.0 min | 17 | 36,518 | 87,939 | 1,293,413 | **1.42M** |
 | Dot ocean | Live | 3.5 min | 14 | 16,796 | 60,890 | 859,525 | **0.94M** |
+| Soft orbs | Live | 1.8 min | 7 | 10,273 | 52,486 | 352,432 | **0.42M** |
 
 Uncached input was under 40 tokens per run, so it's left out.
 
-Three runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed.
+Four runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed. Soft orbs was a test of the tool, so its scene isn't in this repo.
 
-**Why the totals look so high:** about 90% of each total is cache reads. Every model call re-reads the conversation so far, and cached context counts for far less than new work, so the token total overstates how much work a run really was.
+**Why the totals look so high:** about 85 to 90% of each total is cache reads. Every model call re-reads the conversation so far, and cached context counts for far less than new work, so the token total overstates how much work a run really was.
 
 ## If you use an API key
 
@@ -66,6 +67,7 @@ For comparison only, here's what the same runs would cost if billed through the 
 | Paper boat | $2.12 |
 | Hot air balloon | $1.69 |
 | Dot ocean | $1.00 |
+| Soft orbs | $0.70 |
 
 Based on Opus 5.5 rates per million tokens when this was written: $4 input, $20 output, $8 for 1-hour cache writes and $0.20 for cache reads. See [current API prices](https://platform.claude.com/docs/en/about-claude/pricing).
 
