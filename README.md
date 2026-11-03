@@ -55,7 +55,10 @@ Prefer to work interactively? Open Claude Code in this folder and run `/video <p
 Want motion on a web page rather than an MP4? `/hero` writes a live three.js scene and bundles it, three.js included, into one file that runs on your visitors' GPUs.
 
 <div align="center">
-  <img src="docs/hero-live.png" alt="A wave of violet, pink and cyan dots behind the header of a live portfolio site" width="720"><br>
+  <img src="docs/dot-wave.gif" alt="A rolling wave of violet, pink and cyan dots moving slowly across a dark background" width="600"><br>
+  <sub><em>The <code>dot-ocean</code> scene on its own, looping. <a href="docs/dot-wave.mp4">Watch the full-quality MP4</a></em></sub>
+  <br><br>
+  <img src="docs/hero-live.png" alt="The same wave behind the header of a live portfolio site" width="600"><br>
   <sub><em>Running in production on <a href="https://cotetiu-madalin-portfolio.vercel.app/">cotetiu-madalin-portfolio.vercel.app</a>, in the header of every page</em></sub>
 </div>
 
