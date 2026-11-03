@@ -2,168 +2,153 @@
 
 # 🎬 Video Generator
 
-### Type a prompt. Get a video or a live website animation. Every pixel is written as code.
+### Type a prompt. Get an MP4 video or a live website animation.
 
-**No image models. No video models. No API keys. No stock assets.**<br>
-Claude Code writes a three.js scene from your prompt. Your GPU renders it to MP4, or it runs live on your website.
+Claude Code writes every scene as three.js code, checks its own frames, and your GPU does the rendering.<br>
+**No image or video models. No extra API keys. No stock assets.**
 
 ![three.js](https://img.shields.io/badge/three.js-0.187-black?logo=threedotjs)
 ![Node](https://img.shields.io/badge/Node-22-5FA04E?logo=nodedotjs&logoColor=white)
 ![Claude Code](https://img.shields.io/badge/AI-Claude%20Code%20only-D97757?logo=anthropic&logoColor=white)
-![Runs locally](https://img.shields.io/badge/renders-100%25%20local-2ea44f)
-
-<br>
-
-<img src="docs/balloon.gif" alt="A striped hot air balloon drifting over misty mountains as the sun rises" width="640">
-
-*"a hot air balloon drifting over misty mountains at sunrise, 8 seconds"*
 
 </div>
 
-## ✨ Gallery
+## Choose what you want to make
 
 <table>
   <tr>
-    <td align="center" width="50%">
-      <img src="docs/paper-boat.gif" alt="A paper boat riding huge waves at night with lightning" width="270"><br>
-      <sub><em>"a paper boat sailing through a stormy sea at night, with lightning flashes, vertical format for shorts, 6 seconds"</em></sub>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/planet.gif" alt="A low-poly planet with orbiting moons and the title NEW WORLDS" width="400"><br>
-      <sub><em>Hand-written reference scene that the generator learns the format from</em></sub>
-    </td>
+    <th width="50%">🎞️ MP4 video</th>
+    <th width="50%">🌊 Live website animation</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/media/balloon.gif" alt="A striped hot air balloon drifting over misty mountains at sunrise" width="400"></td>
+    <td align="center"><img src="docs/media/dot-wave.gif" alt="A rolling wave of violet, pink and cyan dots" width="400"></td>
+  </tr>
+  <tr>
+    <td>A video file to post, share or edit.</td>
+    <td>Real three.js running on your site, behind your content.</td>
+  </tr>
+  <tr>
+    <td>
+
+```bash
+npm run video -- "a lighthouse in the fog"
+```
+
+</td>
+    <td>
+
+```bash
+npm run hero -- "a wave of violet dots"
+```
+
+</td>
+  </tr>
+  <tr>
+    <td><strong>You get:</strong> <code>videos/&lt;slug&gt;/video.mp4</code></td>
+    <td><strong>You get:</strong> <code>heroes/&lt;slug&gt;/dist/hero.js</code></td>
+  </tr>
+  <tr>
+    <td><strong>Runs on:</strong> your machine, once. Viewers just watch the file.</td>
+    <td><strong>Runs on:</strong> each visitor's GPU, for as long as the page is open.</td>
+  </tr>
+  <tr>
+    <td><strong>Best for:</strong> social clips, shorts, and anything you'd upload.</td>
+    <td><strong>Best for:</strong> animated headers that stay sharp, follow your theme and can react to the cursor.</td>
+  </tr>
+  <tr>
+    <td align="center"><strong><a href="docs/mp4-videos.md">MP4 video guide →</a></strong></td>
+    <td align="center"><strong><a href="docs/live-animations.md">Live animation guide →</a></strong></td>
   </tr>
 </table>
 
-The prompted videos above came straight from the pipeline, with no manual edits. Their source is in [`videos/`](videos/). The GIFs are downscaled previews of the full-quality MP4s.
+See a live animation in production on [cotetiu-madalin-portfolio.vercel.app](https://cotetiu-madalin-portfolio.vercel.app/).
 
-## 🚀 Quick start
+## Quick start
 
 **You need:** Node 22, Chrome or Edge, and [Claude Code](https://claude.com/claude-code) signed in.
 
 ```bash
 npm install
-npm run generate -- "a lighthouse in the fog, its beam sweeping across dark water"
+npm run video -- "a lighthouse in the fog, its beam sweeping across dark water"
 ```
 
-Your video lands in `videos/<slug>/video.mp4`.
+## How the skills work
 
-Prefer to work interactively? Open Claude Code in this folder and run `/video <prompt>`, then keep asking for changes.
-
-## 🌊 Live animations for websites
-
-Want motion on a web page rather than an MP4? `/hero` writes a live three.js scene and bundles it, three.js included, into one file that runs on your visitors' GPUs.
-
-<div align="center">
-  <img src="docs/dot-wave.gif" alt="A rolling wave of violet, pink and cyan dots moving slowly across a dark background" width="600"><br>
-  <sub><em>The <code>dot-ocean</code> scene on its own, looping. <a href="docs/dot-wave.mp4">Watch the full-quality MP4</a></em></sub>
-  <br><br>
-  <img src="docs/hero-live.png" alt="The same wave behind the header of a live portfolio site" width="600"><br>
-  <sub><em>Running in production on <a href="https://cotetiu-madalin-portfolio.vercel.app/">cotetiu-madalin-portfolio.vercel.app</a>, in the header of every page</em></sub>
-</div>
-
-```bash
-npm run hero -- "a flowing wave of small dots, in violet and cyan"
-node src/hero.mjs heroes/<slug>/scene.js --out ../my-site/public/hero
-```
-
-```js
-const { mount } = await import('/hero/hero.js');
-const hero = mount(element, { theme: 'dark' }); // then hero.setTheme('light'), hero.destroy()
-```
-
-It's transparent, follows the cursor if the scene uses it, and supports light and dark themes. It resizes with the page, pauses off-screen, shows a still frame for reduced-motion visitors, lowers its resolution on slow devices, and does nothing if WebGL is unavailable.
-
-The page element needs a position set, because the canvas fills it absolutely.
-
-Every build has to pass these checks on the integrated GPU, under a strict Content Security Policy:
-
-| Check | Budget | `dot-ocean` |
-|---|---|---|
-| Median frame at 1920x1080 | 12 ms | 1.3 ms |
-| 95th percentile frame | 20 ms | 3.4 ms |
-| Gzipped bundle | 250 KB | 134 KB |
-| Opaque pixels | 50% | 0% |
-| Still looks the same after an hour | Required | Yes |
-
-**Fitting it to a site:** a scene can't know where a given page puts its text, so a site with more than one layout may need its own masking. The portfolio uses a CSS mask to keep the wave clear of each page's text column and fade it out before the header ends.
-
-## 🧠 How it works
+A **skill** is a set of written instructions that Claude Code follows when you call it. This project has two, one for each output. They share the same idea, with Claude reviewing its own work before finishing, and they differ in what happens at the end.
 
 ```mermaid
-flowchart LR
-    A["💬 Your prompt"] --> B["🤖 Claude Code<br/>writes a three.js scene"]
-    B --> C["🖼️ Renders a<br/>contact sheet"]
-    C --> D{"👀 Looks right?"}
-    D -- "no, up to 3 rounds" --> B
-    D -- yes --> E["🌐 Headless Chrome<br/>draws every frame on your GPU"]
-    E --> F["🎞️ ffmpeg<br/>encodes the frames"]
-    F --> G["✅ video.mp4"]
+flowchart TD
+    A["💬 Your prompt"] --> B["🤖 Claude writes a three.js scene"]
+    B --> C["🖼️ Renders sample frames"]
+    C --> D{"👀 Claude reviews them"}
+    D -- "needs fixes, up to 3 rounds" --> B
+    D -- "looks right, /video" --> E["🌐 Chrome draws every frame on your GPU"]
+    E --> F["🎞️ ffmpeg encodes video.mp4"]
+    D -- "looks right, /hero" --> G["📦 hero.js, already bundled and within its checks"]
 ```
 
-The interesting step is the loop. Claude **looks at its own output**, critiques it and fixes the code before committing to a final render. `/hero` uses the same loop, with a bundling step and budget checks in place of the final render.
+| | [`/video`](.claude/skills/video/SKILL.md) | [`/hero`](.claude/skills/hero/SKILL.md) |
+|---|---|---|
+| **Claude writes** | `videos/<slug>/scene.js`, with a beginning, a change and an ending | `heroes/<slug>/scene.js`, slow and ambient, playing forever |
+| **Claude checks** | Is the subject recognizable? Is it well framed? Does it reach an ending? | Is the text readable? Does it work in dark, light and phone views, and after an hour? |
+| **The tool enforces** | Nothing loads from outside your machine | The same, plus frame time, file size and transparency limits |
+| **Script that runs** | `src/video/render.mjs` | `src/hero/build.mjs` |
 
-## 🔒 Built-in guarantees
+**Two ways to run a skill:**
 
-| | |
-|---|---|
-| **Reproducible** | Scenes run on a virtual clock with seeded randomness. Two renders of the example scene were byte-identical. |
-| **Local rendering** | Any scene that requests something outside the local server fails the render. |
-| **Billed to your plan** | `generate` removes `ANTHROPIC_API_KEY` from its environment, so runs use your Claude Code login rather than per-token API billing. |
-| **Scoped permissions** | The CLI lets Claude edit only `videos/` and `heroes/`, and run only the two build scripts. |
+- **From your terminal,** with `npm run video` or `npm run hero`. It runs once and finishes, which suits a single generation.
+- **Inside Claude Code,** by typing `/video <prompt>` or `/hero <prompt>`. You can then keep asking for changes in the same session.
 
-## 🛠️ Commands
+## What it costs
 
-| Command | What you get |
-|---|---|
-| `npm run generate -- "prompt"` | The full pipeline, from prompt to MP4 |
-| `npm run hero -- "prompt"` | The full pipeline, from prompt to live `hero.js` |
-| `node src/render.mjs videos/<slug>/scene.js` | Full render to `video.mp4` |
-| `node src/render.mjs videos/<slug>/scene.js --preview` | 12-frame contact sheet at `preview.png` |
-| `node src/render.mjs videos/<slug>/scene.js --at 2.5` | One full-resolution frame |
-| `node src/hero.mjs heroes/<slug>/scene.js` | Build and check a hero, with a contact sheet at `preview.png` |
-| `node src/hero.mjs heroes/<slug>/scene.js --out <dir>` | The same, then copy `hero.js` to your site if it passes |
+**No additional cost.** You use only what you already have: Claude Code and your own machine. There's no extra AI service, image or video model, API key, or per-video charge. Generating simply draws on the usage your plan already includes.
 
-## 📊 What a generation costs
+Everything here was built and measured on a **basic Claude Code subscription**.
 
-There are no per-generation charges, but it does use your Claude Code plan. Measured on a Windows laptop with an RTX 4050 and Opus 5.5:
+| Activity | What it uses | Additional cost |
+|---|---|---|
+| **Generate an MP4 video** | Your Claude usage: about 1.4M to 1.6M tokens, 7 to 8 minutes | **$0** |
+| **Generate a live animation** | Your Claude usage: about 0.9M tokens, 3.5 minutes | **$0** |
+| **Re-render or rebuild an existing scene** | Your machine only | **$0** |
+| **Visitors viewing a live animation** | Their GPU, and your site's hosting | **$0** for AI |
 
-| Output | Format | Tokens | Time |
-|---|---|---|---|
-| Paper boat | 6s video, vertical | 1.56M | ~8 min |
-| Hot air balloon | 8s video, 1080p | 1.42M | ~7 min |
-| Dot ocean | Live hero | 0.94M | ~3 min |
+One video used an estimated **10 to 13% of a session limit** and about 1% of the weekly limit, so roughly 7 to 10 similar videos fit in a session window. That's from a single measured run, so yours will vary.
 
-- About 90% of those tokens are low-cost cache reads.
-- The balloon run used **10–13% of a session limit** and about **1% of a weekly limit**. That's an estimate from one run, and it will vary by plan and prompt.
-- Almost all the time goes to writing and refining the scene. The final render takes seconds.
+**[Full cost breakdown →](docs/costs.md)**
 
-## 📁 Project layout
+## Project layout
 
 ```text
-.claude/skills/video/SKILL.md   The prompt-to-video workflow and scene contract
-.claude/skills/hero/SKILL.md    The prompt-to-live-animation workflow and scene contract
-src/generate.mjs                CLI that runs a skill through `claude -p`
-src/render.mjs                  Captures frames in headless Chrome and encodes with ffmpeg
-src/hero.mjs                    Bundles a hero with esbuild and enforces its budgets
-src/browser.mjs                 Local server and locked-down browser, shared by both
-src/runtime/                    Browser side: frame loop, virtual clock, helpers, hero runtime
-videos/<slug>/scene.js          Generated videos (rendered files stay out of git)
-heroes/<slug>/scene.js          Generated heroes (builds and previews stay out of git)
+.claude/skills/
+  video/SKILL.md        Instructions Claude follows for /video
+  hero/SKILL.md         Instructions Claude follows for /hero
+
+src/
+  run-skill.mjs         Runs a skill from the terminal (npm run video, npm run hero)
+  video/                MP4 pipeline: frame capture and encoding
+  hero/                 Live pipeline: bundling, budget checks, page runtime
+  shared/               Local server, locked-down browser, scene helpers
+
+videos/<slug>/scene.js  Generated videos (rendered MP4s stay out of git)
+heroes/<slug>/scene.js  Generated animations (builds stay out of git)
+
+docs/
+  mp4-videos.md         Guide to MP4 videos
+  live-animations.md    Guide to live animations
+  costs.md              Full cost breakdown
+  media/                Images and clips used in these docs
 ```
 
-## 🚧 Current limitations
+## Known issues
 
-- **Stylized, not photorealistic.** Everything is procedural 3D, so real people and live-action footage become an interpretation.
-- **Silent.** There's no audio yet.
-- **Checked by stills.** Claude reviews sampled frames, not playback, so motion is worth checking yourself.
-- **Memory hungry.** ffmpeg reached about 1 GB during a 1080p render, which can be tight on a 16 GB machine with other work running.
-- **Cancelling isn't clean yet.** Killing the outer command may leave a generation running in the background.
-- **Tested on Windows only.** The renderer looks for browsers on macOS and Linux too, but that's untested.
-- **Heroes aren't measured on phones.** Budgets run on a laptop's integrated GPU, so real phone performance is unknown.
-- **A stopped run still exits 0.** If Claude halts part-way, `npm run generate` and `npm run hero` still report success, so read the final message.
+- **Tested on Windows only.** The tools look for browsers on macOS and Linux too, but that's untested.
+- **Stopping a run isn't clean.** Killing the outer command may leave a generation running in the background, still using tokens.
+- **A stopped run still exits 0.** If Claude halts part-way, `npm run video` and `npm run hero` still report success, so read the final message.
 
-## 🗺️ Ideas for later
+Each guide lists the limitations specific to that output.
+
+## Ideas for later
 
 - [ ] Procedural audio synced to the picture
 - [ ] Clean cancellation and lower memory use

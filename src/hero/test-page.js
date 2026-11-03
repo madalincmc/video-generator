@@ -1,4 +1,4 @@
-// Browser side of src/hero.mjs: mounts a built hero and measures it.
+// Browser side of src/hero/build.mjs: mounts a built hero and measures it.
 const hero = document.getElementById('hero');
 let handle;
 

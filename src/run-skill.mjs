@@ -1,5 +1,5 @@
 // One-shot entry points:
-//   npm run generate -- "a paper boat in a storm"     MP4 video
+//   npm run video -- "a paper boat in a storm"        MP4 video
 //   npm run hero -- "drifting particles"              live animation for a website
 // Runs the matching skill through the local Claude Code CLI, on your Claude Code login.
 import { spawn } from 'node:child_process';
@@ -16,17 +16,17 @@ const ALLOWED_TOOLS = [
   'Edit(videos/**)', // also covers Write
   'Edit(heroes/**)',
   // Windows sessions may reach for either shell.
-  'Bash(node src/render.mjs:*)',
-  'PowerShell(node src/render.mjs:*)',
-  'Bash(node src/hero.mjs:*)',
-  'PowerShell(node src/hero.mjs:*)',
+  'Bash(node src/video/render.mjs:*)',
+  'PowerShell(node src/video/render.mjs:*)',
+  'Bash(node src/hero/build.mjs:*)',
+  'PowerShell(node src/hero/build.mjs:*)',
 ];
 
-const args = process.argv.slice(2);
-const skill = args[0] === '--hero' ? (args.shift(), 'hero') : 'video';
-const prompt = args.join(' ').trim();
-if (!prompt) {
-  console.error(`Usage: npm run ${skill === 'hero' ? 'hero' : 'generate'} -- "what it should show"`);
+const [skill, ...words] = process.argv.slice(2);
+const prompt = words.join(' ').trim();
+if (!['video', 'hero'].includes(skill) || !prompt) {
+  console.error('Usage: npm run video -- "what it should show"');
+  console.error('       npm run hero -- "what it should show"');
   process.exit(1);
 }
 

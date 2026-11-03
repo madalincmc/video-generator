@@ -1,14 +1,14 @@
 // Renders a three.js scene module to video, frame by frame, in headless Chrome.
 //
-//   node src/render.mjs videos/foo/scene.js            full render  -> videos/foo/video.mp4
-//   node src/render.mjs videos/foo/scene.js --preview  contact sheet -> videos/foo/preview.png
-//   node src/render.mjs videos/foo/scene.js --at 2.5   single frame  -> videos/foo/frame-2.5.png
+//   node src/video/render.mjs videos/foo/scene.js            full render  -> videos/foo/video.mp4
+//   node src/video/render.mjs videos/foo/scene.js --preview  contact sheet -> videos/foo/preview.png
+//   node src/video/render.mjs videos/foo/scene.js --at 2.5   single frame  -> videos/foo/frame-2.5.png
 import { spawn } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import ffmpegPath from 'ffmpeg-static';
-import { ROOT, openPage, serveProject } from './browser.mjs';
+import { ROOT, openPage, serveProject } from '../shared/browser.mjs';
 
 const PREVIEW_COLUMNS = 4;
 const PREVIEW_ROWS = 3;
@@ -45,7 +45,7 @@ async function main() {
     options: { preview: { type: 'boolean' }, at: { type: 'string' }, out: { type: 'string' } },
   });
   if (positionals.length !== 1) {
-    throw new Error('Usage: node src/render.mjs <scene.js> [--preview | --at <seconds>] [--out <file>]');
+    throw new Error('Usage: node src/video/render.mjs <scene.js> [--preview | --at <seconds>] [--out <file>]');
   }
 
   const scenePath = resolve(positionals[0]);
@@ -55,7 +55,7 @@ async function main() {
   const sceneDir = dirname(scenePath);
 
   const { server, origin } = await serveProject();
-  const { browser, page, check } = await openPage(origin, { path: '/src/runtime/page.html' });
+  const { browser, page, check } = await openPage(origin, { path: '/src/video/page.html' });
 
   try {
     const config = await page.evaluate((url) => window.__loadConfig(url), sceneUrl);

@@ -8,13 +8,13 @@
         "imports": {
           "three": "/node_modules/three/build/three.module.js",
           "three/addons/": "/node_modules/three/examples/jsm/",
-          "kit": "/src/runtime/kit.js"
+          "kit": "/src/shared/kit.js"
         }
       }
     </script>
     <!-- Must run before any module so scenes only ever see the virtual clock and seeded RNG. -->
-    <script src="/src/runtime/determinism.js"></script>
-    <script type="module" src="/src/runtime/runtime.js"></script>
+    <script src="/src/video/determinism.js"></script>
+    <script type="module" src="/src/video/runtime.js"></script>
   </head>
   <body style="margin: 0; background: #000"></body>
 </html>

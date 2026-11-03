@@ -5,7 +5,7 @@ import { dirname, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 
-export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const HIGH_PERFORMANCE_GPU = '--force_high_performance_gpu';
 export const LOW_POWER_GPU = '--force_low_power_gpu';
 

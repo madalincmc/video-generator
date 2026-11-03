@@ -2,7 +2,7 @@
 name: hero
 description: Generate a live three.js animation for a website header or hero section from a text prompt, built into one self-contained hero.js. Use when the user asks for a website animation, animated header or hero background. For rendered MP4 files, use the video skill instead.
 argument-hint: <what the animation should show, plus any brand colors>
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/hero.mjs:*), PowerShell(node src/hero.mjs:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/hero/build.mjs:*), PowerShell(node src/hero/build.mjs:*)
 ---
 
 Make a live website hero animation of: **$ARGUMENTS**
@@ -63,7 +63,7 @@ Rules:
 ## 3. Check it
 
 ```
-node src/hero.mjs heroes/<slug>/scene.js
+node src/hero/build.mjs heroes/<slug>/scene.js
 ```
 
 This builds `heroes/<slug>/dist/hero.js` and enforces the budgets on the integrated GPU under a

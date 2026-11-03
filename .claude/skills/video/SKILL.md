@@ -2,7 +2,7 @@
 name: video
 description: Generate a short video from a text prompt by writing a three.js scene and rendering it locally to MP4. Use when the user asks to make, generate or revise a video or animation.
 argument-hint: <what the video should show>
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/render.mjs:*), PowerShell(node src/render.mjs:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/video/render.mjs:*), PowerShell(node src/video/render.mjs:*)
 ---
 
 Make a short video of: **$ARGUMENTS**
@@ -62,7 +62,7 @@ Rules:
 ## 3. Check it with your own eyes
 
 ```
-node src/render.mjs videos/<slug>/scene.js --preview
+node src/video/render.mjs videos/<slug>/scene.js --preview
 ```
 
 Then use Read on `videos/<slug>/preview.png`. It's a 4x3 contact sheet of evenly spaced frames,
@@ -73,13 +73,13 @@ left to right, top to bottom. Critique it honestly:
 - Does the sheet show real change over time, and does the ending resolve?
 
 Fix what's wrong and preview again, up to 3 rounds. To inspect detail at full resolution, run
-`node src/render.mjs videos/<slug>/scene.js --at <seconds>` and Read the `frame-<seconds>.png`.
+`node src/video/render.mjs videos/<slug>/scene.js --at <seconds>` and Read the `frame-<seconds>.png`.
 If the render reports a scene error, fix it and rerun.
 
 ## 4. Render and report
 
 ```
-node src/render.mjs videos/<slug>/scene.js
+node src/video/render.mjs videos/<slug>/scene.js
 ```
 
 Finish with the path to `videos/<slug>/video.mp4`, one sentence describing the result, and

@@ -1,7 +1,7 @@
 // Builds a live hero scene into one self-contained hero.js, and checks it is fit for a real page.
 //
-//   node src/hero.mjs heroes/foo/scene.js                 build, check -> dist/hero.js, preview.png
-//   node src/hero.mjs heroes/foo/scene.js --out <dir>     also copy hero.js to <dir> if checks pass
+//   node src/hero/build.mjs heroes/foo/scene.js                 build, check -> dist/hero.js, preview.png
+//   node src/hero/build.mjs heroes/foo/scene.js --out <dir>     also copy hero.js to <dir> if checks pass
 //
 // Exits non-zero if any budget is missed.
 import { spawn } from 'node:child_process';
@@ -11,7 +11,7 @@ import { parseArgs } from 'node:util';
 import { gzipSync } from 'node:zlib';
 import { build } from 'esbuild';
 import ffmpegPath from 'ffmpeg-static';
-import { LOW_POWER_GPU, ROOT, openPage, serveProject } from './browser.mjs';
+import { LOW_POWER_GPU, ROOT, openPage, serveProject } from '../shared/browser.mjs';
 
 const BUDGET = {
   gzipKb: 250,
@@ -34,13 +34,13 @@ async function bundle(scenePath, outfile) {
   await build({
     stdin: {
       contents: `
-        import { createMount } from ${JSON.stringify(toImport(join(ROOT, 'src/runtime/hero-mount.js')))};
+        import { createMount } from ${JSON.stringify(toImport(join(ROOT, 'src/hero/mount.js')))};
         import create, * as scene from ${JSON.stringify(toImport(scenePath))};
         export const mount = createMount(create, scene.config);
       `,
       resolveDir: ROOT,
     },
-    alias: { kit: join(ROOT, 'src/runtime/kit.js') },
+    alias: { kit: join(ROOT, 'src/shared/kit.js') },
     bundle: true,
     format: 'esm',
     minify: true,
@@ -67,7 +67,7 @@ async function main() {
     allowPositionals: true,
     options: { out: { type: 'string' } },
   });
-  if (positionals.length !== 1) throw new Error('Usage: node src/hero.mjs <scene.js> [--out <dir>]');
+  if (positionals.length !== 1) throw new Error('Usage: node src/hero/build.mjs <scene.js> [--out <dir>]');
 
   const scenePath = resolve(positionals[0]);
   if (!existsSync(scenePath)) throw new Error(`Scene not found: ${scenePath}`);
@@ -83,7 +83,7 @@ async function main() {
   const bundleUrl = `/${relative(ROOT, bundlePath).split(sep).join('/')}`;
 
   const { server, origin } = await serveProject();
-  const { browser, page, check } = await openPage(origin, { path: '/src/runtime/hero-test.html', gpu: LOW_POWER_GPU });
+  const { browser, page, check } = await openPage(origin, { path: '/src/hero/test-page.html', gpu: LOW_POWER_GPU });
 
   const failures = [];
   const expect = (ok, message) => {
