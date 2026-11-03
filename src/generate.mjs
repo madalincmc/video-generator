@@ -1,5 +1,7 @@
-// One-shot entry point: npm run generate -- "a paper boat in a storm"
-// Runs the /video skill through the local Claude Code CLI, on your Claude Code login.
+// One-shot entry points:
+//   npm run generate -- "a paper boat in a storm"     MP4 video
+//   npm run hero -- "drifting particles"              live animation for a website
+// Runs the matching skill through the local Claude Code CLI, on your Claude Code login.
 import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,12 +14,19 @@ const ALLOWED_TOOLS = [
   'Glob',
   'Grep',
   'Edit(videos/**)', // also covers Write
+  'Edit(heroes/**)',
+  // Windows sessions may reach for either shell.
   'Bash(node src/render.mjs:*)',
+  'PowerShell(node src/render.mjs:*)',
+  'Bash(node src/hero.mjs:*)',
+  'PowerShell(node src/hero.mjs:*)',
 ];
 
-const prompt = process.argv.slice(2).join(' ').trim();
+const args = process.argv.slice(2);
+const skill = args[0] === '--hero' ? (args.shift(), 'hero') : 'video';
+const prompt = args.join(' ').trim();
 if (!prompt) {
-  console.error('Usage: npm run generate -- "what the video should show"');
+  console.error(`Usage: npm run ${skill === 'hero' ? 'hero' : 'generate'} -- "what it should show"`);
   process.exit(1);
 }
 
@@ -27,7 +36,7 @@ const env = { ...process.env };
 delete env.ANTHROPIC_API_KEY;
 delete env.ANTHROPIC_AUTH_TOKEN;
 
-const claude = spawn('claude', ['-p', `/video ${prompt}`, '--allowedTools', ALLOWED_TOOLS.join(',')], {
+const claude = spawn('claude', ['-p', `/${skill} ${prompt}`, '--allowedTools', ALLOWED_TOOLS.join(',')], {
   cwd: ROOT,
   env,
   stdio: ['ignore', 'inherit', 'inherit'],

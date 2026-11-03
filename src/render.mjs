@@ -4,92 +4,15 @@
 //   node src/render.mjs videos/foo/scene.js --preview  contact sheet -> videos/foo/preview.png
 //   node src/render.mjs videos/foo/scene.js --at 2.5   single frame  -> videos/foo/frame-2.5.png
 import { spawn } from 'node:child_process';
-import { existsSync, createReadStream, statSync, writeFileSync } from 'node:fs';
-import { createServer } from 'node:http';
-import { dirname, extname, join, relative, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import ffmpegPath from 'ffmpeg-static';
-import puppeteer from 'puppeteer-core';
+import { ROOT, openPage, serveProject } from './browser.mjs';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PREVIEW_COLUMNS = 4;
 const PREVIEW_ROWS = 3;
 const PREVIEW_TILE_SIZE = 480;
-
-const MIME = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
-  '.mjs': 'text/javascript',
-  '.json': 'application/json',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.wasm': 'application/wasm',
-};
-
-const CHROME_CANDIDATES = [
-  process.env.CHROME_PATH,
-  'C:/Program Files/Google/Chrome/Application/chrome.exe',
-  'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
-  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  '/usr/bin/google-chrome',
-  '/usr/bin/chromium',
-  '/usr/bin/chromium-browser',
-];
-
-function serveProject() {
-  const server = createServer((req, res) => {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    const file = resolve(ROOT, `.${pathname}`);
-    if (!file.startsWith(ROOT + sep) || !existsSync(file) || !statSync(file).isFile()) {
-      res.writeHead(404).end();
-      return;
-    }
-    res.writeHead(200, { 'Content-Type': MIME[extname(file)] ?? 'application/octet-stream' });
-    createReadStream(file).pipe(res);
-  });
-  return new Promise((done) => {
-    server.listen(0, '127.0.0.1', () => done({ server, origin: `http://127.0.0.1:${server.address().port}` }));
-  });
-}
-
-async function openPage(origin) {
-  const executablePath = CHROME_CANDIDATES.find((path) => path && existsSync(path));
-  if (!executablePath) throw new Error('No Chrome or Edge found. Set CHROME_PATH to a browser executable.');
-
-  const browser = await puppeteer.launch({
-    executablePath,
-    headless: true,
-    args: ['--ignore-gpu-blocklist', '--enable-gpu', '--use-angle=d3d11', '--force_high_performance_gpu', '--enable-unsafe-swiftshader'],
-  });
-  const page = await browser.newPage();
-
-  let failure = null;
-  const fail = (message) => {
-    failure ??= new Error(message);
-  };
-  page.on('pageerror', (error) => fail(`Scene error: ${error.message}`));
-  page.on('console', (message) => {
-    if (message.type() === 'error') fail(`Scene console error: ${message.text()}`);
-  });
-
-  // Renders are fully local, so anything reaching off this machine is a scene bug.
-  await page.setRequestInterception(true);
-  page.on('request', (request) => {
-    const url = request.url();
-    if (url.startsWith(origin) || url.startsWith('data:') || url.startsWith('blob:')) {
-      request.continue();
-    } else {
-      fail(`Scene tried to load an external resource: ${url}`);
-      request.abort();
-    }
-  });
-
-  await page.goto(`${origin}/src/runtime/page.html`);
-  await page.waitForFunction('window.__ready === true');
-  return { browser, page, check: () => { if (failure) throw failure; } };
-}
 
 function startFfmpeg(args) {
   const ffmpeg = spawn(ffmpegPath, ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-c:v', 'png', ...args], {
@@ -132,7 +55,7 @@ async function main() {
   const sceneDir = dirname(scenePath);
 
   const { server, origin } = await serveProject();
-  const { browser, page, check } = await openPage(origin);
+  const { browser, page, check } = await openPage(origin, { path: '/src/runtime/page.html' });
 
   try {
     const config = await page.evaluate((url) => window.__loadConfig(url), sceneUrl);

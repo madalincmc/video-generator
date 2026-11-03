@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <!-- As strict as a typical production site, so scenes that need eval or remote assets fail here first. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'"
+    />
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; font-family: Segoe UI, Arial, sans-serif; }
+      body { background: #0b0a14; color: #f5f4f8; }
+      html[data-theme='light'] body { background: #fbfafd; color: #17141f; }
+      #hero { position: absolute; inset: 0; margin: 0 auto; }
+      #copy { position: absolute; top: 28%; left: 6%; max-width: 62%; pointer-events: none; }
+      #copy h1 { margin: 0 0 12px; font-size: 44px; line-height: 1.05; }
+      #copy p { margin: 0; font-size: 18px; opacity: 0.7; }
+    </style>
+    <script type="module" src="/src/runtime/hero-test.js"></script>
+  </head>
+  <body>
+    <div id="hero"></div>
+    <div id="copy">
+      <h1>Headline text sits on top of the scene.</h1>
+      <p>Body copy has to stay readable over every frame.</p>
+    </div>
+  </body>
+</html>

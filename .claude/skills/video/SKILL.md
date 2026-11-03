@@ -2,7 +2,7 @@
 name: video
 description: Generate a short video from a text prompt by writing a three.js scene and rendering it locally to MP4. Use when the user asks to make, generate or revise a video or animation.
 argument-hint: <what the video should show>
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/render.mjs:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(node src/render.mjs:*), PowerShell(node src/render.mjs:*)
 ---
 
 Make a short video of: **$ARGUMENTS**
