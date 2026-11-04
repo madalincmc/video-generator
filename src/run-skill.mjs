@@ -1,6 +1,7 @@
 // One-shot entry points:
 //   npm run video -- "a paper boat in a storm"        MP4 video
 //   npm run hero -- "drifting particles"              live animation for a website
+//   npm run blender-video -- "a stormy lighthouse"    higher-quality MP4, rendered in Blender
 // Runs the matching skill through the local Claude Code CLI, on your Claude Code login.
 import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -20,13 +21,16 @@ const ALLOWED_TOOLS = [
   'PowerShell(node src/video/render.mjs:*)',
   'Bash(node src/hero/build.mjs:*)',
   'PowerShell(node src/hero/build.mjs:*)',
+  'Bash(node src/blender-video/render.mjs:*)',
+  'PowerShell(node src/blender-video/render.mjs:*)',
 ];
 
 const [skill, ...words] = process.argv.slice(2);
 const prompt = words.join(' ').trim();
-if (!['video', 'hero'].includes(skill) || !prompt) {
+if (!['video', 'hero', 'blender-video'].includes(skill) || !prompt) {
   console.error('Usage: npm run video -- "what it should show"');
   console.error('       npm run hero -- "what it should show"');
+  console.error('       npm run blender-video -- "what it should show"');
   process.exit(1);
 }
 

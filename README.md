@@ -64,6 +64,12 @@ npm run hero -- "a wave of violet dots"
 
 See a live animation in production on [cotetiu-madalin-portfolio.vercel.app](https://cotetiu-madalin-portfolio.vercel.app/).
 
+**Want the best quality and can wait?** [Blender videos](docs/blender-videos.md) follow the same prompt-to-MP4 flow, with real light, hair and depth of field, and much longer renders:
+
+```bash
+npm run blender-video -- "a lighthouse in a storm at night"
+```
+
 ## Quick start
 
 **You need:** Node 22, Chrome or Edge, and [Claude Code](https://claude.com/claude-code) signed in.
@@ -110,6 +116,7 @@ Everything here was built and measured on a **basic Claude Code subscription**.
 |---|---|---|
 | **Generate an MP4 video** | Your Claude usage: about 1.4M to 1.6M tokens, 7 to 8 minutes | **$0** |
 | **Generate a live animation** | Your Claude usage: about 0.4M to 0.9M tokens, 2 to 3.5 minutes | **$0** |
+| **Generate a Blender video** | Your Claude usage: about 5.1M tokens and 44 minutes, in the one run measured | **$0** |
 | **Re-render or rebuild an existing scene** | Your machine only | **$0** |
 | **Visitors viewing a live animation** | Their GPU, and your site's hosting | **$0** for AI |
 
@@ -123,11 +130,13 @@ One video used an estimated **10 to 13% of a session limit** and about 1% of the
 .claude/skills/
   video/SKILL.md        Instructions Claude follows for /video
   hero/SKILL.md         Instructions Claude follows for /hero
+  blender-video/SKILL.md  Instructions Claude follows for /blender-video
 
 src/
   run-skill.mjs         Runs a skill from the terminal (npm run video, npm run hero)
   video/                MP4 pipeline: frame capture and encoding
   hero/                 Live pipeline: bundling, budget checks, page runtime
+  blender-video/        Blender pipeline: scene helpers, safety guard, resumable render
   shared/               Local server, locked-down browser, scene helpers
 
 videos/<slug>/scene.js  Generated videos (rendered MP4s stay out of git)
@@ -136,6 +145,7 @@ heroes/<slug>/scene.js  Generated animations (builds stay out of git)
 docs/
   mp4-videos.md         Guide to MP4 videos
   live-animations.md    Guide to live animations
+  blender-videos.md     Guide to Blender videos
   costs.md              Full cost breakdown
   media/                Images and clips used in these docs
 ```

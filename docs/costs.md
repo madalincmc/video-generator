@@ -46,19 +46,20 @@ Each row is one real run from a saved transcript, using Claude Opus 5.5 at Claud
 | Hot air balloon, 8s 1080p | MP4 | 7.0 min | 17 | 36,518 | 87,939 | 1,293,413 | **1.42M** |
 | Dot ocean | Live | 3.5 min | 14 | 16,796 | 60,890 | 859,525 | **0.94M** |
 | Soft orbs | Live | 1.8 min | 7 | 10,273 | 52,486 | 352,432 | **0.42M** |
+| Lighthouse in a storm, 6s 1080p | Blender | 44.3 min | 30 | 101,100 | 208,033 | 4,821,440 | **5.13M** |
 
-Uncached input was under 40 tokens per run, so it's left out.
+Uncached input was at most 60 tokens per run, so it's left out.
 
-Four runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed. Soft orbs was a test of the tool, and its scene is in [`heroes/soft-orbs`](../heroes/soft-orbs/scene.js).
+Five runs aren't an average. The dot ocean figures also include a restart after a permissions problem that has since been fixed. Soft orbs was a test of the tool, and its scene is in [`heroes/soft-orbs`](../heroes/soft-orbs/scene.js). About 23 of the lighthouse's 44 minutes were the final render, and its share of the session and weekly limits wasn't measured.
 
-**Why the totals look so high:** about 85 to 90% of each total is cache reads. Every model call re-reads the conversation so far, and cached context counts for far less than new work, so the token total overstates how much work a run really was.
+**Why the totals look so high:** about 85 to 94% of each total is cache reads. Every model call re-reads the conversation so far, and cached context counts for far less than new work, so the token total overstates how much work a run really was.
 
 ## If you use an API key
 
 Everything above assumes you're signed in with a subscription. API billing is different, because you then pay per token. It's worth checking which one you're using:
 
-- **`npm run video` and `npm run hero`** remove `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` before starting Claude Code, to keep runs on your subscription login.
-- **`/video` and `/hero` inside Claude Code** use whatever your session is signed in with. `/usage` tells you if that's your subscription.
+- **`npm run video`, `npm run hero` and `npm run blender-video`** remove `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` before starting Claude Code, to keep runs on your subscription login.
+- **`/video`, `/hero` and `/blender-video` inside Claude Code** use whatever your session is signed in with. `/usage` tells you if that's your subscription.
 
 For comparison only, here's what the same runs would cost if billed through the API. **This isn't what we paid: on the subscription, these runs cost nothing extra.**
 
@@ -68,6 +69,7 @@ For comparison only, here's what the same runs would cost if billed through the 
 | Hot air balloon | $1.69 |
 | Dot ocean | $1.00 |
 | Soft orbs | $0.70 |
+| Lighthouse in a storm | $4.65 |
 
 Based on Opus 5.5 rates per million tokens when this was written: $4 input, $20 output, $8 for 1-hour cache writes and $0.20 for cache reads. See [current API prices](https://platform.claude.com/docs/en/about-claude/pricing).
 

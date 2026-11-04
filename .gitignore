@@ -3,3 +3,5 @@ videos/**/*.mp4
 videos/**/*.png
 heroes/**/dist/
 heroes/**/*.png
+videos/**/frames/
+videos/**/*.blend
