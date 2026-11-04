@@ -7,8 +7,10 @@
   "scripts": {
     "video": "node src/run-skill.mjs video",
     "hero": "node src/run-skill.mjs hero",
+    "blender-video": "node src/run-skill.mjs blender-video",
     "render": "node src/video/render.mjs",
-    "hero:build": "node src/hero/build.mjs"
+    "hero:build": "node src/hero/build.mjs",
+    "blender:render": "node src/blender-video/render.mjs"
   },
   "dependencies": {
     "ffmpeg-static": "^5.3.0",
